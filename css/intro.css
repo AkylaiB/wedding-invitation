@@ -1,0 +1,248 @@
+/* Intro scene — shell open, pearl reveal/zoom, handoff to pearl hero */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--page-gutter);
+  overflow: visible;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--intro-exit-duration) var(--intro-ease-cinematic),
+    visibility 0s linear 0s;
+}
+
+.intro[data-state="INVITATION"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--intro-exit-duration) var(--intro-ease-cinematic),
+    visibility 0s linear var(--intro-exit-duration);
+}
+
+.intro__trigger {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 28rem);
+  color: inherit;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.intro__trigger:disabled {
+  cursor: default;
+}
+
+.intro__prompt {
+  position: absolute;
+  top: calc(100% + var(--space-lg));
+  left: 50%;
+  width: max-content;
+  max-width: 90vw;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.08em;
+  color: var(--color-ink-soft);
+  text-align: center;
+  transform: translateX(-50%);
+  transition: opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.intro[data-state="CLOSED"] .intro__prompt {
+  animation: intro-prompt-pulse 2.8s ease-in-out infinite;
+}
+
+.intro:not([data-state="CLOSED"]) .intro__prompt {
+  opacity: 0;
+  transform: translateX(-50%) translate3d(0, 0.4rem, 0);
+  animation: none;
+  pointer-events: none;
+}
+
+@keyframes intro-prompt-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.intro[data-state="CLOSED"] .intro__trigger:hover .shell-scene,
+.intro[data-state="CLOSED"] .intro__trigger:focus-visible .shell-scene {
+  transform: scale(1.025);
+}
+
+/* World stays still during open — no rotation, no zoom translate */
+.intro .shell-scene,
+.intro .shell-open,
+.intro .shell-open__scene,
+.intro .shell-open__world {
+  overflow: visible;
+}
+
+.intro .shell-open__world {
+  transform: none;
+}
+
+.intro .shell-lid {
+  opacity: 1;
+  transition: transform var(--intro-open-duration) var(--intro-ease-shell);
+}
+
+.intro .shell-bottom {
+  opacity: 1;
+}
+
+/* Pearl sits in the bowl between the two valves — scale only */
+.intro .pearl-wrap {
+  inset: auto;
+  left: 50%;
+  top: var(--pearl-anchor-y);
+  z-index: 4;
+  width: var(--shell-pearl-size);
+  aspect-ratio: 1 / 1;
+  height: auto;
+  margin-left: calc(var(--shell-pearl-size) / -2);
+  margin-top: calc(var(--shell-pearl-size) / -2);
+  will-change: transform, opacity;
+  transform: scale(0.28);
+  transform-origin: 50% 50%;
+}
+
+.intro .pearl {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+.intro .pearl-glow--bloom {
+  width: 78%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.intro .pearl-glow--core {
+  width: 38%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.intro[data-state="PEARL_REVEAL"] .pearl-glow--core {
+  animation: pearl-shine 1.6s ease-in-out infinite;
+}
+
+@keyframes pearl-shine {
+  50% {
+    opacity: 0.75;
+    filter: blur(0.42rem);
+  }
+}
+
+/* Both halves stay visible until the pearl zoom starts */
+.intro[data-state="OPENING"] .shell-lid,
+.intro[data-state="OPENING"] .shell-bottom,
+.intro[data-state="OPEN"] .shell-lid,
+.intro[data-state="OPEN"] .shell-bottom,
+.intro[data-state="PEARL_REVEAL"] .shell-lid,
+.intro[data-state="PEARL_REVEAL"] .shell-bottom {
+  opacity: 1;
+  visibility: visible;
+}
+
+.intro[data-state="PEARL_REVEAL"] .pearl-wrap {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Zoom in place to the invitation-hero size */
+.intro[data-state="PEARL_ZOOM"] .pearl-wrap,
+.intro[data-state="INVITATION"] .pearl-wrap {
+  visibility: visible;
+  opacity: 1;
+  transition-duration: var(--intro-zoom-duration);
+  transition-timing-function: var(--intro-ease-cinematic);
+  transform: scale(var(--pearl-zoom-scale));
+}
+
+.intro[data-state="PEARL_ZOOM"] .pearl-glow--core,
+.intro[data-state="INVITATION"] .pearl-glow--core {
+  animation: none;
+}
+
+.intro[data-state="PEARL_ZOOM"] .shell-open__scene,
+.intro[data-state="INVITATION"] .shell-open__scene {
+  perspective: none;
+}
+
+.intro[data-state="PEARL_ZOOM"] .shell-lid,
+.intro[data-state="PEARL_ZOOM"] .shell-bottom,
+.intro[data-state="INVITATION"] .shell-lid,
+.intro[data-state="INVITATION"] .shell-bottom {
+  opacity: 0;
+  transition: opacity var(--intro-zoom-duration) var(--intro-ease-cinematic);
+}
+
+.intro[data-state="PEARL_ZOOM"],
+.intro[data-state="INVITATION"] {
+  overflow: hidden;
+}
+
+/* Invitation page revealed after pearl zoom — pearl hero continues the visual */
+.page {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--intro-exit-duration) var(--intro-ease-cinematic),
+    visibility 0s linear var(--intro-exit-duration);
+}
+
+body[data-scene="invitation"] .page {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity var(--intro-exit-duration) var(--intro-ease-cinematic),
+    visibility 0s linear 0s;
+}
+
+body[data-scene="intro"] {
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .intro__prompt {
+    font-size: var(--fs-xl);
+  }
+
+  body {
+    --pearl-zoom-scale: 5.6;
+  }
+}
+
+@media (min-width: 960px) {
+  body {
+    --pearl-zoom-scale: 6.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro[data-state="CLOSED"] .intro__prompt {
+    animation: none;
+  }
+
+  .intro[data-state="CLOSED"] .intro__trigger:hover .shell-scene,
+  .intro[data-state="CLOSED"] .intro__trigger:focus-visible .shell-scene {
+    transform: none;
+  }
+}

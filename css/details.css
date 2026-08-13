@@ -1,0 +1,137 @@
+/* Wedding details — date, time, location, map */
+
+.wedding-details {
+  width: min(100%, 28rem);
+  margin-inline: auto;
+  padding-block: clamp(4rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(4.5rem, 14vh, 8rem);
+}
+
+.detail {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.detail__label {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-champagne-deep);
+}
+
+.detail__value {
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 6vw, 2.75rem);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-tight);
+  letter-spacing: 0.02em;
+  color: var(--color-ink);
+}
+
+.detail__venue {
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 5.5vw, 2.35rem);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: 0.01em;
+  color: var(--color-ink);
+}
+
+.detail__address {
+  max-width: 20rem;
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 2.4vw, 1.05rem);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-soft);
+}
+
+.detail--map {
+  padding-top: clamp(0.5rem, 2vh, 1.5rem);
+}
+
+.map-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding-inline: 0.15em;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  border-bottom: 1px solid var(--color-champagne-deep);
+  transition:
+    color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.map-link:hover {
+  color: var(--color-champagne-deep);
+  border-color: var(--color-ink-soft);
+}
+
+.map-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* Scroll reveal */
+.js .reveal {
+  opacity: 0;
+  transform: translate3d(0, 1.25rem, 0);
+  transition:
+    opacity var(--reveal-duration, 0.9s) var(--ease-out),
+    transform var(--reveal-duration, 0.9s) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (min-width: 640px) {
+  .wedding-details {
+    width: min(100%, 32rem);
+  }
+
+  .detail__address {
+    max-width: 24rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+}

@@ -1,0 +1,234 @@
+/* Invitation flow — pearl hero large enough for invitation copy */
+
+.invitation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+}
+
+.pearl-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  padding: clamp(1.25rem, 4vh, 3rem) var(--page-gutter);
+}
+
+/* The pearl image itself — keep a round proportion (width = height) */
+.pearl-page__image {
+  position: absolute;
+  z-index: 1;
+  width: 194vmin;
+  height: 194vmin;
+  max-width: none;
+  max-height: none;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 1.5rem rgba(255, 250, 240, 0.55))
+    drop-shadow(0 0 3.5rem rgba(236, 214, 196, 0.35));
+  pointer-events: none;
+  user-select: none;
+}
+
+.pearl-page__glow {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.pearl-page__glow--bloom {
+  width: 92vmin;
+  height: 92vmin;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(
+    circle,
+    rgba(255, 248, 230, 0.72) 0%,
+    rgba(255, 228, 186, 0.4) 34%,
+    rgba(236, 214, 196, 0.16) 58%,
+    transparent 74%
+  );
+  filter: blur(1.6rem);
+}
+
+.pearl-page__glow--core {
+  width: 46vmin;
+  height: 46vmin;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 252, 0.9) 0%,
+    rgba(255, 236, 210, 0.55) 36%,
+    rgba(236, 214, 196, 0.2) 64%,
+    transparent 78%
+  );
+  filter: blur(0.7rem);
+  box-shadow:
+    0 0 3rem 1rem rgba(255, 248, 230, 0.45),
+    0 0 6rem 2rem rgba(236, 214, 196, 0.22);
+}
+
+.pearl-page__content {
+  position: relative;
+  z-index: 2;
+  width: min(58vw, 22rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(0.7rem, 1.8vh, 1.15rem);
+  padding: clamp(1rem, 3vh, 1.75rem) clamp(0.75rem, 2.5vw, 1.25rem);
+  color: #000;
+  opacity: 0;
+  transform: translate3d(0, 0.7rem, 0);
+  transition: opacity 1.25s var(--intro-ease-cinematic),
+    transform 1.25s var(--intro-ease-cinematic);
+}
+
+body[data-scene="invitation"] .pearl-page__content {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.85s;
+}
+
+.invitation__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.invitation__greeting {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 4.2vw, 2rem);
+  font-weight: var(--fw-regular);
+  font-style: italic;
+  line-height: var(--lh-tight);
+  letter-spacing: 0.04em;
+  color: #000;
+}
+
+.invitation__header::after {
+  content: "";
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-champagne-deep),
+    transparent
+  );
+  opacity: 0.7;
+}
+
+.invitation__message {
+  max-width: 100%;
+  font-family: var(--font-body);
+  font-size: clamp(0.82rem, 2.1vw, 0.98rem);
+  font-weight: var(--fw-regular);
+  line-height: 1.65;
+  letter-spacing: 0.02em;
+  color: #000;
+}
+
+.invitation__names {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: 0.4em;
+  row-gap: 0.1em;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 7vw, 3.25rem);
+  font-weight: var(--fw-medium);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  color: #000;
+}
+
+.invitation__name {
+  display: inline-block;
+}
+
+.invitation__ampersand {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--fw-regular);
+  font-size: 0.55em;
+  color: #000;
+  transform: translateY(-0.08em);
+}
+
+.invitation__date {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: var(--font-body);
+  font-size: clamp(0.72rem, 1.8vw, 0.85rem);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+@media (min-width: 640px) {
+  .pearl-page__image {
+    width: 208vmin;
+    height: 208vmin;
+  }
+
+  .pearl-page__glow--bloom {
+    width: 102vmin;
+    height: 102vmin;
+  }
+
+  .pearl-page__glow--core {
+    width: 52vmin;
+    height: 52vmin;
+  }
+
+  .pearl-page__content {
+    width: min(42vw, 26rem);
+    gap: clamp(0.9rem, 2.2vh, 1.4rem);
+  }
+}
+
+@media (min-width: 960px) {
+  .pearl-page__image {
+    width: 222vmin;
+    height: 222vmin;
+  }
+
+  .pearl-page__glow--bloom {
+    width: 110vmin;
+    height: 110vmin;
+  }
+
+  .pearl-page__glow--core {
+    width: 56vmin;
+    height: 56vmin;
+  }
+
+  .pearl-page__content {
+    width: min(36vw, 28rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pearl-page__content,
+  body[data-scene="invitation"] .pearl-page__content {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

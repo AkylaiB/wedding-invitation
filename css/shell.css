@@ -1,0 +1,268 @@
+/* Shared pearl-shell assembly — used by intro + wishes */
+
+body {
+  --intro-closed-fade: 0.28s;
+  --intro-open-duration: 1.4s;
+  --intro-pearl-duration: 0.95s;
+  --intro-zoom-duration: 2.45s;
+  --intro-exit-duration: 1.35s;
+  --intro-ease-shell: cubic-bezier(0.45, 0.02, 0.18, 1);
+  --intro-ease-pearl: cubic-bezier(0.22, 1, 0.36, 1);
+  --intro-ease-cinematic: cubic-bezier(0.22, 0.08, 0.16, 1);
+  --shell-open-angle: 118deg;
+  --shell-perspective: 72rem;
+  --shell-bottom-transform: none;
+  /* Umbo sits ~15% from the top of shell-open.webp — hinge is here, not at mid-line */
+  --shell-lid-origin: 50% 15%;
+  --shell-image-position: 73.9% 50%;
+  --shell-pearl-size: 86%;
+  --pearl-anchor-y: 50%;
+  --pearl-zoom-scale: 4.15;
+}
+
+.shell-scene {
+  position: relative;
+  display: block;
+  width: min(78vw, 24rem);
+  transform: translateZ(0);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.shell-closed {
+  position: relative;
+  z-index: 4;
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--intro-closed-fade) var(--ease-out),
+    visibility 0s linear 0s;
+}
+
+[data-shell]:not([data-state="CLOSED"]) .shell-closed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--intro-closed-fade) var(--ease-out),
+    visibility 0s linear var(--intro-closed-fade);
+}
+
+.shell-open {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: visible;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--intro-closed-fade) var(--ease-out),
+    visibility 0s linear var(--intro-closed-fade);
+}
+
+[data-shell]:not([data-state="CLOSED"]) .shell-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity var(--intro-closed-fade) var(--ease-out),
+    visibility 0s linear 0s;
+}
+
+.shell-open__scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  perspective: var(--shell-perspective);
+  perspective-origin: 50% 15%;
+}
+
+.shell-open__world {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: translate3d(0, 0, 0);
+  transform-origin: 50% 52%;
+}
+
+.shell-bottom,
+.shell-lid,
+.shell-lid__image,
+.pearl-wrap,
+.pearl,
+.shell-inner {
+  display: block;
+}
+
+/* Both valves fill the same frame (asset already has umbo at the top).
+   Lower valve stays still. Lid is the same image, hinged at the umbo, opening up/back. */
+.shell-bottom {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: var(--shell-image-position);
+  transform: var(--shell-bottom-transform);
+  transform-origin: 50% 50%;
+}
+
+.shell-lid {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  transform-origin: var(--shell-lid-origin);
+  transform: rotateX(0deg);
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+  will-change: transform, opacity;
+  transition: transform var(--intro-open-duration) var(--intro-ease-shell);
+  pointer-events: none;
+}
+
+.pearl-wrap {
+  position: absolute;
+  inset: auto;
+  left: 50%;
+  top: var(--pearl-anchor-y);
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: var(--shell-pearl-size);
+  aspect-ratio: 1 / 1;
+  margin-left: calc(var(--shell-pearl-size) / -2);
+  margin-top: calc(var(--shell-pearl-size) / -2);
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0.28);
+  transform-origin: 50% 50%;
+  transition: opacity var(--intro-pearl-duration) var(--intro-ease-pearl),
+    transform var(--intro-pearl-duration) var(--intro-ease-pearl);
+}
+
+.pearl-wrap > * {
+  grid-area: 1 / 1;
+}
+
+.pearl {
+  position: relative;
+  z-index: 2;
+  justify-self: center;
+  align-self: center;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  filter: drop-shadow(0 0 0.45rem rgba(255, 250, 240, 0.85))
+    drop-shadow(0 0 1.4rem rgba(255, 228, 196, 0.55));
+}
+
+.pearl-glow {
+  z-index: 0;
+  justify-self: center;
+  align-self: center;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.pearl-glow--bloom {
+  width: 78%;
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    rgba(255, 248, 230, 0.7) 0%,
+    rgba(255, 228, 186, 0.42) 32%,
+    rgba(236, 214, 196, 0.18) 58%,
+    transparent 74%
+  );
+  filter: blur(1.15rem);
+}
+
+.pearl-glow--core {
+  z-index: 1;
+  width: 38%;
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 252, 0.95) 0%,
+    rgba(255, 236, 210, 0.7) 34%,
+    rgba(236, 214, 196, 0.28) 62%,
+    transparent 78%
+  );
+  filter: blur(0.35rem);
+  box-shadow:
+    0 0 1.25rem 0.35rem rgba(255, 248, 230, 0.65),
+    0 0 2.8rem 0.8rem rgba(236, 214, 196, 0.35);
+}
+
+.shell-lid__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: var(--shell-image-position);
+  pointer-events: none;
+}
+
+[data-shell][data-state="OPENING"] .shell-lid,
+[data-shell][data-state="OPEN"] .shell-lid,
+[data-shell][data-state="PEARL_REVEAL"] .shell-lid,
+[data-shell][data-state="PEARL_ZOOM"] .shell-lid,
+[data-shell][data-state="INVITATION"] .shell-lid,
+[data-shell][data-state="FORM"] .shell-lid,
+[data-shell][data-state="FADING"] .shell-lid,
+[data-shell][data-state="PARTICLE"] .shell-lid,
+[data-shell][data-state="PEARL"] .shell-lid,
+[data-shell][data-state="SENT"] .shell-lid {
+  transform: rotateX(var(--shell-open-angle));
+}
+
+.shell-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 14% 12% 20%;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateZ(1.1rem) scale(0.92);
+  transform-origin: 50% 55%;
+  transition: opacity var(--intro-pearl-duration) var(--intro-ease-pearl),
+    transform var(--intro-pearl-duration) var(--intro-ease-pearl);
+  pointer-events: none;
+}
+
+[data-shell][data-state="FORM"] .shell-inner,
+[data-shell][data-state="FADING"] .shell-inner {
+  opacity: 1;
+  visibility: visible;
+  transform: translateZ(1.1rem) scale(1);
+  pointer-events: auto;
+}
+
+[data-shell][data-state="FADING"] .shell-inner {
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .shell-scene {
+    width: min(70vw, 26rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    --intro-closed-fade: 0.01s;
+    --intro-open-duration: 0.01s;
+    --intro-pearl-duration: 0.2s;
+    --intro-zoom-duration: 0.01s;
+    --intro-exit-duration: 0.2s;
+  }
+}

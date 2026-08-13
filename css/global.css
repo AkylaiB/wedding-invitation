@@ -1,0 +1,71 @@
+/* Shared atmosphere — invitation scene styles live in invitation.css */
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+  color: var(--color-ink);
+  background-color: var(--color-pearl);
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse 85% 65% at 18% 12%, rgba(245, 232, 214, 0.55) 0%, transparent 58%),
+    radial-gradient(ellipse 75% 55% at 88% 18%, rgba(236, 224, 214, 0.45) 0%, transparent 52%),
+    radial-gradient(ellipse 70% 50% at 70% 88%, rgba(214, 201, 186, 0.28) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 45% at 12% 85%, rgba(250, 246, 240, 0.9) 0%, transparent 50%),
+    linear-gradient(168deg, var(--color-pearl) 0%, var(--color-ivory) 42%, var(--color-champagne) 100%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.28;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(74, 64, 53, 0.07) 1px, transparent 0);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 40%, black 20%, transparent 75%);
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--page-gutter);
+  z-index: 100;
+  padding: var(--space-2xs) var(--space-sm);
+  background: var(--color-ink);
+  color: var(--color-pearl);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  border-radius: var(--radius-sm);
+  transform: translateY(-200%);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-inline: var(--page-gutter);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

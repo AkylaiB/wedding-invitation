@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Свадебное приглашение — 5 сентября 2026."
+    />
+    <title>Свадебное приглашение</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Manrope:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" as="image" href="assets/images/shell-closed.webp" />
+    <link rel="preload" as="image" href="assets/images/shell-open.webp" />
+    <link rel="preload" as="image" href="assets/images/pearl.webp" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/shell.css" />
+    <link rel="stylesheet" href="css/intro.css" />
+    <link rel="stylesheet" href="css/invitation.css" />
+    <link rel="stylesheet" href="css/details.css" />
+    <link rel="stylesheet" href="css/gallery.css" />
+    <link rel="stylesheet" href="css/wishes.css" />
+  </head>
+  <body data-scene="intro">
+    <a class="skip-link" href="#invitation">Перейти к приглашению</a>
+
+    <section
+      id="intro"
+      class="intro"
+      data-shell
+      data-state="CLOSED"
+      aria-label="Открыть приглашение"
+    >
+      <button
+        type="button"
+        class="intro__trigger"
+        aria-label="Открыть приглашение"
+      >
+        <span class="shell-scene">
+          <img
+            class="shell-closed"
+            src="assets/images/shell-closed.webp"
+            alt=""
+            draggable="false"
+            decoding="async"
+          />
+
+          <span class="shell-open" aria-hidden="true">
+            <span class="shell-open__scene">
+              <span class="shell-open__world">
+                <img
+                  class="shell-bottom"
+                  src="assets/images/shell-open.webp"
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                />
+                <span class="pearl-wrap">
+                  <span class="pearl-glow pearl-glow--bloom" aria-hidden="true"></span>
+                  <span class="pearl-glow pearl-glow--core" aria-hidden="true"></span>
+                  <img
+                    class="pearl"
+                    src="assets/images/pearl.webp"
+                    alt=""
+                    draggable="false"
+                    decoding="async"
+                  />
+                </span>
+                <span class="shell-lid">
+                  <img
+                    class="shell-lid__image"
+                    src="assets/images/shell-open.webp"
+                    alt=""
+                    draggable="false"
+                    decoding="async"
+                  />
+                </span>
+              </span>
+            </span>
+          </span>
+        </span>
+        <span id="intro-prompt" class="intro__prompt">Откройте приглашение</span>
+      </button>
+    </section>
+
+    <div class="page">
+      <main
+        id="invitation"
+        class="invitation"
+        tabindex="-1"
+        aria-hidden="true"
+        aria-labelledby="invitation-names"
+      >
+        <section class="pearl-page" aria-label="Приглашение">
+          <span class="pearl-page__glow pearl-page__glow--bloom" aria-hidden="true"></span>
+          <span class="pearl-page__glow pearl-page__glow--core" aria-hidden="true"></span>
+          <img
+            class="pearl-page__image"
+            src="assets/images/pearl.webp"
+            alt=""
+            decoding="async"
+          />
+
+          <div class="pearl-page__content">
+            <header class="invitation__header">
+              <p class="invitation__greeting">Дорогие гости</p>
+            </header>
+
+            <p class="invitation__message">
+              Мы будем счастливы разделить<br />
+              с вами этот особенный день.
+            </p>
+
+            <h1 id="invitation-names" class="invitation__names">
+              <span class="invitation__name">Эрбол</span>
+              <span class="invitation__ampersand" aria-hidden="true">&amp;</span>
+              <span class="invitation__name">Нази</span>
+            </h1>
+
+            <time class="invitation__date" datetime="2026-09-05">
+              05&nbsp;&bull;&nbsp;09&nbsp;&bull;&nbsp;2026
+            </time>
+          </div>
+        </section>
+
+        <div class="wedding-details">
+          <section
+            class="detail reveal"
+            id="date"
+            aria-labelledby="date-label"
+          >
+            <h2 id="date-label" class="detail__label">Дата</h2>
+            <p class="detail__value">
+              <time datetime="2026-09-05">5 Сентября 2026</time>
+            </p>
+          </section>
+
+          <section
+            class="detail reveal"
+            id="time"
+            aria-labelledby="time-label"
+          >
+            <h2 id="time-label" class="detail__label">Время</h2>
+            <p class="detail__value">
+              <time datetime="17:00">17:00</time>
+            </p>
+          </section>
+
+          <section
+            class="detail reveal"
+            id="location"
+            aria-labelledby="location-label"
+          >
+            <h2 id="location-label" class="detail__label">Место</h2>
+            <p class="detail__venue">РЕСТОРАН</p>
+            <p class="detail__address">ул. Пушкина, 123</p>
+          </section>
+
+          <section
+            class="detail detail--map reveal"
+            id="map"
+            aria-labelledby="map-label"
+          >
+            <h2 id="map-label" class="visually-hidden">Карта</h2>
+            <a
+              class="map-link"
+              href="https://maps.app.goo.gl/N6zf98ybhywozgtL6"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Открыть карту
+            </a>
+          </section>
+        </div>
+
+        <section
+          class="gallery"
+          id="gallery"
+          aria-labelledby="gallery-heading"
+        >
+          <header class="gallery__header reveal">
+            <p class="gallery__eyebrow">Моменты</p>
+            <h2 id="gallery-heading" class="gallery__title">Галерея</h2>
+          </header>
+
+          <ul class="gallery__grid">
+            <li class="gallery__item reveal">
+              <button
+                type="button"
+                class="gallery__trigger"
+                data-gallery-index="0"
+                data-full="assets/images/gallery/1.jpg"
+                data-alt="Свадебная фотография 1"
+                aria-label="Открыть фотографию 1"
+              >
+                <span class="gallery__frame">
+                  <img
+                    src="assets/images/gallery/1.jpg"
+                    alt=""
+                    width="1200"
+                    height="1500"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              </button>
+            </li>
+            <li class="gallery__item reveal">
+              <button
+                type="button"
+                class="gallery__trigger"
+                data-gallery-index="1"
+                data-full="assets/images/gallery/2.jpg"
+                data-alt="Свадебная фотография 2"
+                aria-label="Открыть фотографию 2"
+              >
+                <span class="gallery__frame">
+                  <img
+                    src="assets/images/gallery/2.jpg"
+                    alt=""
+                    width="1200"
+                    height="1500"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              </button>
+            </li>
+            <li class="gallery__item reveal">
+              <button
+                type="button"
+                class="gallery__trigger"
+                data-gallery-index="2"
+                data-full="assets/images/gallery/3.jpg"
+                data-alt="Свадебная фотография 3"
+                aria-label="Открыть фотографию 3"
+              >
+                <span class="gallery__frame">
+                  <img
+                    src="assets/images/gallery/3.jpg"
+                    alt=""
+                    width="1200"
+                    height="1500"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              </button>
+            </li>
+            <li class="gallery__item reveal">
+              <button
+                type="button"
+                class="gallery__trigger"
+                data-gallery-index="3"
+                data-full="assets/images/gallery/4.jpg"
+                data-alt="Свадебная фотография 4"
+                aria-label="Открыть фотографию 4"
+              >
+                <span class="gallery__frame">
+                  <img
+                    src="assets/images/gallery/4.jpg"
+                    alt=""
+                    width="1200"
+                    height="1500"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              </button>
+            </li>
+            <li class="gallery__item reveal">
+              <button
+                type="button"
+                class="gallery__trigger"
+                data-gallery-index="4"
+                data-full="assets/images/gallery/5.jpg"
+                data-alt="Свадебная фотография 5"
+                aria-label="Открыть фотографию 5"
+              >
+                <span class="gallery__frame">
+                  <img
+                    src="assets/images/gallery/5.jpg"
+                    alt=""
+                    width="1200"
+                    height="1500"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              </button>
+            </li>
+            <li class="gallery__item reveal">
+              <button
+                type="button"
+                class="gallery__trigger"
+                data-gallery-index="5"
+                data-full="assets/images/gallery/6.jpg"
+                data-alt="Свадебная фотография 6"
+                aria-label="Открыть фотографию 6"
+              >
+                <span class="gallery__frame">
+                  <img
+                    src="assets/images/gallery/6.jpg"
+                    alt=""
+                    width="1200"
+                    height="1500"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              </button>
+            </li>
+          </ul>
+        </section>
+
+        <section
+          class="wishes reveal"
+          id="wishes"
+          data-shell
+          data-state="CLOSED"
+          aria-labelledby="wishes-heading"
+          aria-expanded="false"
+        >
+          <header class="wishes__header">
+            <p class="wishes__eyebrow">Пожелания</p>
+            <h2 id="wishes-heading" class="wishes__title">
+              Оставьте нам немного тепла
+            </h2>
+          </header>
+
+          <div class="wishes__stage">
+            <div class="shell-scene">
+              <img
+                class="shell-closed"
+                src="assets/images/shell-closed.webp"
+                alt=""
+                draggable="false"
+                decoding="async"
+                loading="lazy"
+              />
+
+              <div class="shell-open" aria-hidden="true">
+                <div class="shell-open__scene">
+                  <div class="shell-open__world">
+                    <img
+                      class="shell-bottom"
+                      src="assets/images/shell-open.webp"
+                      alt=""
+                      draggable="false"
+                      decoding="async"
+                      loading="lazy"
+                    />
+
+                    <div class="shell-inner">
+                      <div class="wish-card">
+                        <p class="wish-card__title">Ваше пожелание</p>
+
+                        <form class="wish-form" novalidate>
+                          <div class="wish-form__field">
+                            <label class="wish-form__label" for="wish-name"
+                              >Имя</label
+                            >
+                            <input
+                              class="wish-form__input"
+                              id="wish-name"
+                              name="name"
+                              type="text"
+                              autocomplete="name"
+                              maxlength="80"
+                              required
+                            />
+                          </div>
+
+                          <div class="wish-form__field">
+                            <label class="wish-form__label" for="wish-message"
+                              >Сообщение</label
+                            >
+                            <textarea
+                              class="wish-form__textarea"
+                              id="wish-message"
+                              name="message"
+                              maxlength="500"
+                              required
+                            ></textarea>
+                          </div>
+
+                          <button
+                            class="wish-form__submit"
+                            type="submit"
+                          >
+                            Отправить
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+
+                    <div class="wish-pearl-stage" aria-hidden="true">
+                      <span class="wish-particle" aria-hidden="true"></span>
+                      <img
+                        class="wish-pearl"
+                        src="assets/images/pearl.webp"
+                        alt=""
+                        draggable="false"
+                        decoding="async"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <div class="shell-lid">
+                      <img
+                        class="shell-lid__image"
+                        src="assets/images/shell-open.webp"
+                        alt=""
+                        draggable="false"
+                        decoding="async"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p
+              class="wish-thanks"
+              id="wish-thanks"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></p>
+
+            <button
+              type="button"
+              class="wishes__cta"
+              aria-controls="wishes"
+              aria-expanded="false"
+            >
+              Оставить пожелание
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog
+      class="lightbox"
+      id="lightbox"
+      aria-labelledby="lightbox-status"
+    >
+      <button type="button" class="lightbox__close" aria-label="Закрыть">
+        ×
+      </button>
+      <button type="button" class="lightbox__prev" aria-label="Предыдущее фото">
+        ‹
+      </button>
+      <button type="button" class="lightbox__next" aria-label="Следующее фото">
+        ›
+      </button>
+      <div class="lightbox__stage">
+        <img class="lightbox__image" alt="" />
+      </div>
+      <p class="lightbox__status" id="lightbox-status" aria-live="polite"></p>
+    </dialog>
+
+    <script src="js/shell.js" defer></script>
+    <script src="js/intro.js" defer></script>
+    <script src="js/reveal.js" defer></script>
+    <script src="js/gallery.js" defer></script>
+    <script src="js/wishes.js" defer></script>
+    <script src="js/main.js" defer></script>
+  </body>
+</html>
