@@ -193,6 +193,8 @@
   width: min(100%, 30rem);
   height: clamp(6.5rem, 22vw, 8.5rem);
 }
+
+.wish-necklace__thread {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -201,11 +203,19 @@
 }
 
 .wish-necklace__thread path {
-  stroke: #c4b09a;
-  stroke-width: 1.15;
+  fill: none;
   stroke-linecap: round;
-  stroke-dasharray: 3 5;
-  opacity: 0.85;
+  stroke-linejoin: round;
+}
+
+.wish-necklace__thread-glow {
+  stroke: rgba(255, 248, 230, 0.7);
+  stroke-width: 3.2;
+}
+
+.wish-necklace__thread-line {
+  stroke: #b7a48e;
+  stroke-width: 1.35;
 }
 
 .wish-necklace__beads {
