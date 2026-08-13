@@ -16,7 +16,7 @@ body {
   --shell-lid-origin: 50% 15%;
   --shell-image-position: 73.9% 50%;
   --shell-pearl-size: 86%;
-  --pearl-anchor-y: 50%;
+  --pearl-anchor-y: 40%;
   --pearl-zoom-scale: 4.15;
 }
 
@@ -241,9 +241,10 @@ body {
 
 [data-shell][data-state="FORM"] .shell-inner,
 [data-shell][data-state="FADING"] .shell-inner {
+  z-index: 6;
   opacity: 1;
   visibility: visible;
-  transform: translateZ(1.1rem) scale(1);
+  transform: none;
   pointer-events: auto;
 }
 

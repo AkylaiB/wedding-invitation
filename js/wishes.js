@@ -1,5 +1,5 @@
 /**
- * Wishes section — shell form + createWishPearl animation
+ * Wishes section — form + pearl joining an open strand
  */
 (function createWishes() {
   "use strict";
@@ -8,12 +8,8 @@
   window.WeddingInvitation = root;
 
   var WishesState = Object.freeze({
-    CLOSED: "CLOSED",
-    OPENING: "OPENING",
-    OPEN: "OPEN",
     FORM: "FORM",
     FADING: "FADING",
-    PARTICLE: "PARTICLE",
     PEARL: "PEARL",
     SENT: "SENT",
   });
@@ -42,7 +38,7 @@
   }
 
   /**
-   * Turns a submitted wish into a pearl inside the wishes shell.
+   * Adds the submitted wish as a new pearl on the strand.
    * @param {string} name
    * @param {string} message Reserved for a future backend; unused visually for now.
    * @param {object} [options]
@@ -61,8 +57,8 @@
     }
 
     var thanks = section.querySelector("#wish-thanks");
-    var pearlStage = section.querySelector(".wish-pearl-stage");
     var form = section.querySelector(".wish-form");
+    var necklace = section.querySelector(".wish-necklace");
     var safeName = String(name || "").trim() || "гость";
     var safeMessage = String(message || "").trim();
 
@@ -80,8 +76,8 @@
           "Спасибо, " + escapeHtml(safeName) + " <span aria-hidden=\"true\">🤍</span>";
       }
 
-      if (pearlStage) {
-        pearlStage.setAttribute("aria-hidden", "false");
+      if (necklace) {
+        necklace.setAttribute("aria-hidden", "false");
       }
 
       if (form) {
@@ -103,67 +99,31 @@
 
     setPhase(WishesState.FADING);
 
-    return wait(480)
-      .then(function () {
-        setPhase(WishesState.PARTICLE);
-        return wait(720);
-      })
+    return wait(380)
       .then(function () {
         setPhase(WishesState.PEARL);
-        return wait(1100);
+        return wait(1200);
       })
       .then(finishThanks);
   }
 
   function initWishes() {
     var section = document.getElementById("wishes");
-    var cta = section && section.querySelector(".wishes__cta");
     var form = section && section.querySelector(".wish-form");
     var nameInput = section && section.querySelector("#wish-name");
     var messageInput = section && section.querySelector("#wish-message");
     var submitBtn = section && section.querySelector(".wish-form__submit");
 
-    if (!section || !cta || !form || typeof root.createShell !== "function") {
+    if (!section || !form) {
       return;
     }
 
-    var shell = root.createShell(section);
-    var shellOpen = section.querySelector(".shell-open");
     var submitting = false;
-
-    if (!shell) {
-      return;
-    }
-
-    function showForm() {
-      shell.setState(WishesState.FORM);
-      section.setAttribute("aria-expanded", "true");
-
-      if (shellOpen) {
-        shellOpen.setAttribute("aria-hidden", "false");
-      }
-
-      window.setTimeout(function () {
-        if (nameInput) {
-          nameInput.focus();
-        }
-      }, 80);
-    }
-
-    function openWishes() {
-      if (shell.getState() !== WishesState.CLOSED) {
-        return;
-      }
-
-      cta.disabled = true;
-      cta.setAttribute("aria-expanded", "true");
-      shell.open(showForm);
-    }
 
     function simulateSubmit(event) {
       event.preventDefault();
 
-      if (submitting || shell.getState() !== WishesState.FORM) {
+      if (submitting || section.dataset.state !== WishesState.FORM) {
         return;
       }
 
@@ -186,7 +146,7 @@
         submitBtn.textContent = "Отправляем…";
       }
 
-      wait(450)
+      wait(280)
         .then(function () {
           return createWishPearl(name, message, { root: section });
         })
@@ -198,11 +158,10 @@
             submitBtn.textContent = "Отправить";
           }
 
-          shell.setState(WishesState.FORM);
+          section.dataset.state = WishesState.FORM;
         });
     }
 
-    cta.addEventListener("click", openWishes);
     form.addEventListener("submit", simulateSubmit);
   }
 

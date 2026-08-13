@@ -23,6 +23,15 @@
     visibility 0s linear var(--intro-exit-duration);
 }
 
+.intro[data-state="INVITATION"],
+.intro[data-state="INVITATION"] * {
+  pointer-events: none;
+}
+
+.intro[hidden] {
+  display: none;
+}
+
 .intro__trigger {
   position: relative;
   display: flex;
@@ -39,6 +48,7 @@
 
 .intro__trigger:disabled {
   cursor: default;
+  pointer-events: none;
 }
 
 .intro__prompt {
@@ -92,13 +102,15 @@
   transform: none;
 }
 
-.intro .shell-lid {
-  opacity: 1;
-  transition: transform var(--intro-open-duration) var(--intro-ease-shell);
-}
-
+.intro .shell-lid,
 .intro .shell-bottom {
   opacity: 1;
+  transition: opacity var(--intro-zoom-duration) var(--intro-ease-cinematic);
+}
+
+.intro .shell-lid {
+  transition: transform var(--intro-open-duration) var(--intro-ease-shell),
+    opacity var(--intro-zoom-duration) var(--intro-ease-cinematic);
 }
 
 /* Pearl sits in the bowl between the two valves — scale only */
@@ -181,17 +193,11 @@
   animation: none;
 }
 
-.intro[data-state="PEARL_ZOOM"] .shell-open__scene,
-.intro[data-state="INVITATION"] .shell-open__scene {
-  perspective: none;
-}
-
 .intro[data-state="PEARL_ZOOM"] .shell-lid,
 .intro[data-state="PEARL_ZOOM"] .shell-bottom,
 .intro[data-state="INVITATION"] .shell-lid,
 .intro[data-state="INVITATION"] .shell-bottom {
   opacity: 0;
-  transition: opacity var(--intro-zoom-duration) var(--intro-ease-cinematic);
 }
 
 .intro[data-state="PEARL_ZOOM"],

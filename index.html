@@ -322,10 +322,8 @@
         <section
           class="wishes reveal"
           id="wishes"
-          data-shell
-          data-state="CLOSED"
+          data-state="FORM"
           aria-labelledby="wishes-heading"
-          aria-expanded="false"
         >
           <header class="wishes__header">
             <p class="wishes__eyebrow">Пожелания</p>
@@ -335,96 +333,109 @@
           </header>
 
           <div class="wishes__stage">
-            <div class="shell-scene">
-              <img
-                class="shell-closed"
-                src="assets/images/shell-closed.webp"
-                alt=""
-                draggable="false"
-                decoding="async"
-                loading="lazy"
-              />
-
-              <div class="shell-open" aria-hidden="true">
-                <div class="shell-open__scene">
-                  <div class="shell-open__world">
-                    <img
-                      class="shell-bottom"
-                      src="assets/images/shell-open.webp"
-                      alt=""
-                      draggable="false"
-                      decoding="async"
-                      loading="lazy"
-                    />
-
-                    <div class="shell-inner">
-                      <div class="wish-card">
-                        <p class="wish-card__title">Ваше пожелание</p>
-
-                        <form class="wish-form" novalidate>
-                          <div class="wish-form__field">
-                            <label class="wish-form__label" for="wish-name"
-                              >Имя</label
-                            >
-                            <input
-                              class="wish-form__input"
-                              id="wish-name"
-                              name="name"
-                              type="text"
-                              autocomplete="name"
-                              maxlength="80"
-                              required
-                            />
-                          </div>
-
-                          <div class="wish-form__field">
-                            <label class="wish-form__label" for="wish-message"
-                              >Сообщение</label
-                            >
-                            <textarea
-                              class="wish-form__textarea"
-                              id="wish-message"
-                              name="message"
-                              maxlength="500"
-                              required
-                            ></textarea>
-                          </div>
-
-                          <button
-                            class="wish-form__submit"
-                            type="submit"
-                          >
-                            Отправить
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-
-                    <div class="wish-pearl-stage" aria-hidden="true">
-                      <span class="wish-particle" aria-hidden="true"></span>
-                      <img
-                        class="wish-pearl"
-                        src="assets/images/pearl.webp"
-                        alt=""
-                        draggable="false"
-                        decoding="async"
-                        loading="lazy"
-                      />
-                    </div>
-
-                    <div class="shell-lid">
-                      <img
-                        class="shell-lid__image"
-                        src="assets/images/shell-open.webp"
-                        alt=""
-                        draggable="false"
-                        decoding="async"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                </div>
+            <div class="wish-necklace" aria-hidden="true">
+              <svg
+                class="wish-necklace__thread"
+                viewBox="0 0 400 90"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M 8 30 C 70 82, 330 82, 392 30"
+                  fill="none"
+                />
+              </svg>
+              <div class="wish-necklace__beads">
+                <img
+                  class="wish-bead"
+                  src="assets/images/pearl.webp"
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  loading="lazy"
+                  style="--x: 9%; --y: 36%; --s: 0.82"
+                />
+                <img
+                  class="wish-bead"
+                  src="assets/images/pearl.webp"
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  loading="lazy"
+                  style="--x: 26%; --y: 68%; --s: 0.94"
+                />
+                <img
+                  class="wish-bead"
+                  src="assets/images/pearl.webp"
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  loading="lazy"
+                  style="--x: 43%; --y: 84%; --s: 0.88"
+                />
+                <img
+                  class="wish-bead"
+                  src="assets/images/pearl.webp"
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  loading="lazy"
+                  style="--x: 60%; --y: 84%; --s: 1"
+                />
+                <img
+                  class="wish-bead"
+                  src="assets/images/pearl.webp"
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  loading="lazy"
+                  style="--x: 76%; --y: 64%; --s: 0.9"
+                />
+                <img
+                  class="wish-bead wish-bead--new"
+                  src="assets/images/pearl.webp"
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  loading="lazy"
+                  style="--x: 91%; --y: 34%; --s: 1.08"
+                />
               </div>
+            </div>
+
+            <div class="wish-card">
+              <p class="wish-card__title">Ваше пожелание</p>
+
+              <form class="wish-form" novalidate>
+                <div class="wish-form__field">
+                  <label class="wish-form__label" for="wish-name">Имя</label>
+                  <input
+                    class="wish-form__input"
+                    id="wish-name"
+                    name="name"
+                    type="text"
+                    autocomplete="name"
+                    maxlength="80"
+                    required
+                  />
+                </div>
+
+                <div class="wish-form__field">
+                  <label class="wish-form__label" for="wish-message"
+                    >Сообщение</label
+                  >
+                  <textarea
+                    class="wish-form__textarea"
+                    id="wish-message"
+                    name="message"
+                    maxlength="500"
+                    required
+                  ></textarea>
+                </div>
+
+                <button class="wish-form__submit" type="submit">
+                  Отправить
+                </button>
+              </form>
             </div>
 
             <p
@@ -434,15 +445,6 @@
               aria-live="polite"
               hidden
             ></p>
-
-            <button
-              type="button"
-              class="wishes__cta"
-              aria-controls="wishes"
-              aria-expanded="false"
-            >
-              Оставить пожелание
-            </button>
           </div>
         </section>
       </main>

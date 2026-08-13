@@ -56,6 +56,7 @@
         "opacity",
         cssDurationMs(document.body, "--intro-exit-duration"),
         function () {
+          intro.setAttribute("hidden", "");
           invitation.focus({ preventScroll: true });
         }
       );
