@@ -1,45 +1,118 @@
-/* Intro scene — shell open, pearl reveal/zoom, handoff to pearl hero */
+/* Intro — click to play shell-open video, invitation copy on the last frame */
 
 .intro {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--page-gutter);
-  overflow: visible;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity var(--intro-exit-duration) var(--intro-ease-cinematic),
-    visibility 0s linear 0s;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--color-pearl);
 }
 
-.intro[data-state="INVITATION"] {
+.intro__stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.intro__poster,
+.intro__video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+  pointer-events: none;
+  user-select: none;
+}
+
+.intro__poster {
+  z-index: 1;
+}
+
+.intro__video {
+  z-index: 0;
+  transform: scale(1);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.intro[data-state="PLAYING"] .intro__poster,
+.intro[data-state="ENDED"] .intro__poster {
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
-  transition: opacity var(--intro-exit-duration) var(--intro-ease-cinematic),
-    visibility 0s linear var(--intro-exit-duration);
 }
 
-.intro[data-state="INVITATION"],
-.intro[data-state="INVITATION"] * {
-  pointer-events: none;
+.intro[data-state="CLOSED"]:hover .intro__video,
+.intro[data-state="CLOSED"]:hover .intro__poster,
+.intro[data-state="CLOSED"]:focus-within .intro__video,
+.intro[data-state="CLOSED"]:focus-within .intro__poster {
+  transform: scale(1.025);
 }
 
-.intro[hidden] {
-  display: none;
+.intro__poster {
+  transform: scale(1);
+  transition: opacity var(--duration-fast) var(--ease-out),
+    visibility 0s linear 0s,
+    transform var(--duration-base) var(--ease-out);
 }
 
-.intro__trigger {
-  position: relative;
+.intro[data-state="PLAYING"] .intro__poster,
+.intro[data-state="ENDED"] .intro__poster {
+  transition: opacity var(--duration-fast) var(--ease-out),
+    visibility 0s linear var(--duration-fast),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.intro__text {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  width: min(58vw, 22rem);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: min(100%, 28rem);
+  text-align: center;
+  gap: clamp(0.7rem, 1.8vh, 1.15rem);
+  padding: clamp(1rem, 3vh, 1.75rem) clamp(0.75rem, 2.5vw, 1.25rem);
+  color: #000;
+  text-shadow: 0 0 1.1rem rgba(248, 245, 240, 0.7);
+  opacity: 0;
+  transform: translate(-50%, -50%) translate3d(0, 0.7rem, 0);
+  pointer-events: none;
+  transition: opacity 1.25s var(--intro-ease-cinematic),
+    transform 1.25s var(--intro-ease-cinematic);
+}
+
+.intro[data-state="ENDED"] .intro__text {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.intro__trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: clamp(1.25rem, 5vh, 2.5rem);
   color: inherit;
   appearance: none;
+  background: transparent;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   touch-action: manipulation;
@@ -52,9 +125,6 @@
 }
 
 .intro__prompt {
-  position: absolute;
-  top: calc(100% + var(--space-lg));
-  left: 50%;
   width: max-content;
   max-width: 90vw;
   font-family: var(--font-display);
@@ -63,7 +133,6 @@
   letter-spacing: 0.08em;
   color: var(--color-ink-soft);
   text-align: center;
-  transform: translateX(-50%);
   transition: opacity var(--duration-base) var(--ease-out),
     transform var(--duration-base) var(--ease-out);
 }
@@ -74,7 +143,7 @@
 
 .intro:not([data-state="CLOSED"]) .intro__prompt {
   opacity: 0;
-  transform: translateX(-50%) translate3d(0, 0.4rem, 0);
+  transform: translate3d(0, 0.4rem, 0);
   animation: none;
   pointer-events: none;
 }
@@ -85,127 +154,6 @@
   }
 }
 
-.intro[data-state="CLOSED"] .intro__trigger:hover .shell-scene,
-.intro[data-state="CLOSED"] .intro__trigger:focus-visible .shell-scene {
-  transform: scale(1.025);
-}
-
-/* World stays still during open — no rotation, no zoom translate */
-.intro .shell-scene,
-.intro .shell-open,
-.intro .shell-open__scene,
-.intro .shell-open__world {
-  overflow: visible;
-}
-
-.intro .shell-open__world {
-  transform: none;
-}
-
-.intro .shell-lid,
-.intro .shell-bottom {
-  opacity: 1;
-  transition: opacity var(--intro-zoom-duration) var(--intro-ease-cinematic);
-}
-
-.intro .shell-lid {
-  transition: transform var(--intro-open-duration) var(--intro-ease-shell),
-    opacity var(--intro-zoom-duration) var(--intro-ease-cinematic);
-}
-
-/* Pearl sits in the bowl between the two valves — scale only */
-.intro .pearl-wrap {
-  inset: auto;
-  left: 50%;
-  top: var(--pearl-anchor-y);
-  z-index: 4;
-  width: var(--shell-pearl-size);
-  aspect-ratio: 1 / 1;
-  height: auto;
-  margin-left: calc(var(--shell-pearl-size) / -2);
-  margin-top: calc(var(--shell-pearl-size) / -2);
-  will-change: transform, opacity;
-  transform: scale(0.28);
-  transform-origin: 50% 50%;
-}
-
-.intro .pearl {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
-}
-
-.intro .pearl-glow--bloom {
-  width: 78%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-}
-
-.intro .pearl-glow--core {
-  width: 38%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-}
-
-.intro[data-state="PEARL_REVEAL"] .pearl-glow--core {
-  animation: pearl-shine 1.6s ease-in-out infinite;
-}
-
-@keyframes pearl-shine {
-  50% {
-    opacity: 0.75;
-    filter: blur(0.42rem);
-  }
-}
-
-/* Both halves stay visible until the pearl zoom starts */
-.intro[data-state="OPENING"] .shell-lid,
-.intro[data-state="OPENING"] .shell-bottom,
-.intro[data-state="OPEN"] .shell-lid,
-.intro[data-state="OPEN"] .shell-bottom,
-.intro[data-state="PEARL_REVEAL"] .shell-lid,
-.intro[data-state="PEARL_REVEAL"] .shell-bottom {
-  opacity: 1;
-  visibility: visible;
-}
-
-.intro[data-state="PEARL_REVEAL"] .pearl-wrap {
-  visibility: visible;
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Zoom in place to the invitation-hero size */
-.intro[data-state="PEARL_ZOOM"] .pearl-wrap,
-.intro[data-state="INVITATION"] .pearl-wrap {
-  visibility: visible;
-  opacity: 1;
-  transition-duration: var(--intro-zoom-duration);
-  transition-timing-function: var(--intro-ease-cinematic);
-  transform: scale(var(--pearl-zoom-scale));
-}
-
-.intro[data-state="PEARL_ZOOM"] .pearl-glow--core,
-.intro[data-state="INVITATION"] .pearl-glow--core {
-  animation: none;
-}
-
-.intro[data-state="PEARL_ZOOM"] .shell-lid,
-.intro[data-state="PEARL_ZOOM"] .shell-bottom,
-.intro[data-state="INVITATION"] .shell-lid,
-.intro[data-state="INVITATION"] .shell-bottom {
-  opacity: 0;
-}
-
-.intro[data-state="PEARL_ZOOM"],
-.intro[data-state="INVITATION"] {
-  overflow: hidden;
-}
-
-/* Invitation page revealed after pearl zoom — pearl hero continues the visual */
 .page {
   opacity: 0;
   visibility: hidden;
@@ -231,14 +179,15 @@ body[data-scene="intro"] {
     font-size: var(--fs-xl);
   }
 
-  body {
-    --pearl-zoom-scale: 5.6;
+  .intro__text {
+    width: min(42vw, 26rem);
+    gap: clamp(0.9rem, 2.2vh, 1.4rem);
   }
 }
 
 @media (min-width: 960px) {
-  body {
-    --pearl-zoom-scale: 6.4;
+  .intro__text {
+    width: min(36vw, 28rem);
   }
 }
 
@@ -247,8 +196,15 @@ body[data-scene="intro"] {
     animation: none;
   }
 
-  .intro[data-state="CLOSED"] .intro__trigger:hover .shell-scene,
-  .intro[data-state="CLOSED"] .intro__trigger:focus-visible .shell-scene {
+  .intro[data-state="CLOSED"]:hover .intro__video,
+  .intro[data-state="CLOSED"]:hover .intro__poster,
+  .intro[data-state="CLOSED"]:focus-within .intro__video,
+  .intro[data-state="CLOSED"]:focus-within .intro__poster {
     transform: none;
+  }
+
+  .intro__text,
+  .intro[data-state="ENDED"] .intro__text {
+    transition: none;
   }
 }

@@ -1,99 +1,124 @@
 /**
- * Intro shell scene — createShell → pearl reveal → pearl zoom → invitation
+ * Intro — play shell-open video, freeze the last pearl frame, show invitation copy
  */
 (function createIntroScene() {
   "use strict";
 
   var IntroState = Object.freeze({
     CLOSED: "CLOSED",
-    OPENING: "OPENING",
-    OPEN: "OPEN",
-    PEARL_REVEAL: "PEARL_REVEAL",
-    PEARL_ZOOM: "PEARL_ZOOM",
-    INVITATION: "INVITATION",
+    PLAYING: "PLAYING",
+    ENDED: "ENDED",
   });
 
   var root = window.WeddingInvitation || {};
   window.WeddingInvitation = root;
 
+  function prefersReducedMotion() {
+    if (typeof root.prefersReducedMotion === "function") {
+      return root.prefersReducedMotion();
+    }
+
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
   function initIntro() {
     var intro = document.getElementById("intro");
     var trigger = intro && intro.querySelector(".intro__trigger");
-    var pearlWrap = intro && intro.querySelector(".pearl-wrap");
+    var video = intro && intro.querySelector(".intro__video");
+    var text = intro && intro.querySelector(".intro__text");
     var invitation = document.getElementById("invitation");
     var skipLink = document.querySelector(".skip-link");
 
-    if (!intro || !trigger || !pearlWrap || !invitation) {
+    if (!intro || !trigger || !video || !text || !invitation) {
       return;
     }
 
-    if (typeof root.createShell !== "function") {
-      return;
+    var finished = false;
+
+    function showFirstFrame() {
+      if (intro.dataset.state !== IntroState.CLOSED) {
+        return;
+      }
+
+      if (!isFinite(video.duration) || video.readyState < 1) {
+        return;
+      }
+
+      try {
+        if (video.currentTime < 0.01) {
+          video.currentTime = 0.001;
+        }
+      } catch (error) {
+        /* Seeking can fail before metadata is ready. */
+      }
     }
 
-    var shell = root.createShell(intro);
-    var afterTransition = root.afterTransition;
-    var cssDurationMs = root.cssDurationMs;
-    var prefersReducedMotion = root.prefersReducedMotion;
+    video.addEventListener("loadeddata", showFirstFrame);
+    video.addEventListener("loadedmetadata", showFirstFrame);
 
-    if (!shell) {
-      return;
+    if (video.readyState >= 1) {
+      showFirstFrame();
+    }
+
+    function freezeLastFrame() {
+      if (!isFinite(video.duration) || video.duration <= 0) {
+        return;
+      }
+
+      try {
+        video.pause();
+        video.currentTime = Math.max(0, video.duration - 0.04);
+      } catch (error) {
+        /* Seeking can fail before metadata is ready. */
+      }
     }
 
     function showInvitation() {
-      if (shell.getState() === IntroState.INVITATION) {
+      if (finished) {
         return;
       }
 
-      shell.setState(IntroState.INVITATION);
+      finished = true;
+      intro.dataset.state = IntroState.ENDED;
       document.body.dataset.scene = "invitation";
-      intro.setAttribute("aria-hidden", "true");
+      text.setAttribute("aria-hidden", "false");
       invitation.setAttribute("aria-hidden", "false");
       trigger.disabled = true;
-
-      afterTransition(
-        intro,
-        "opacity",
-        cssDurationMs(document.body, "--intro-exit-duration"),
-        function () {
-          intro.setAttribute("hidden", "");
-          invitation.focus({ preventScroll: true });
-        }
-      );
+      trigger.setAttribute("aria-disabled", "true");
+      freezeLastFrame();
     }
 
-    function startPearlZoom() {
-      if (shell.getState() !== IntroState.PEARL_REVEAL) {
+    function jumpToEnd(thenShow) {
+      function finishJump() {
+        video.removeEventListener("seeked", finishJump);
+        freezeLastFrame();
+        if (thenShow) {
+          showInvitation();
+        }
+      }
+
+      if (!isFinite(video.duration) || video.duration <= 0) {
+        video.addEventListener(
+          "loadedmetadata",
+          function onMeta() {
+            video.removeEventListener("loadedmetadata", onMeta);
+            jumpToEnd(thenShow);
+          },
+          { once: true }
+        );
         return;
       }
 
-      shell.setState(IntroState.PEARL_ZOOM);
-
-      var zoomMs = cssDurationMs(document.body, "--intro-zoom-duration");
-
-      /* Crossfade onto the invitation pearl before the zoom fully settles */
-      window.setTimeout(function () {
-        if (shell.getState() !== IntroState.PEARL_ZOOM) {
-          return;
-        }
-
-        showInvitation();
-      }, Math.round(zoomMs * 0.58));
+      video.addEventListener("seeked", finishJump);
+      try {
+        video.currentTime = Math.max(0, video.duration - 0.04);
+      } catch (error) {
+        finishJump();
+      }
     }
 
-    function revealPearl() {
-      shell.setState(IntroState.PEARL_REVEAL);
-
-      afterTransition(
-        pearlWrap,
-        "opacity",
-        cssDurationMs(document.body, "--intro-pearl-duration"),
-        startPearlZoom
-      );
-    }
-
-    function openShell() {
-      if (shell.getState() !== IntroState.CLOSED) {
+    function playIntro() {
+      if (intro.dataset.state !== IntroState.CLOSED) {
         return;
       }
 
@@ -101,27 +126,43 @@
       trigger.setAttribute("aria-disabled", "true");
 
       if (prefersReducedMotion()) {
-        shell.setState(IntroState.OPENING);
-        shell.setState(IntroState.PEARL_REVEAL);
-        afterTransition(
-          pearlWrap,
-          "opacity",
-          cssDurationMs(document.body, "--intro-pearl-duration"),
-          showInvitation
-        );
+        intro.dataset.state = IntroState.PLAYING;
+        jumpToEnd(true);
         return;
       }
 
-      shell.open(revealPearl);
+      intro.dataset.state = IntroState.PLAYING;
+      var playAttempt = video.play();
+
+      if (playAttempt && typeof playAttempt.catch === "function") {
+        playAttempt.catch(function () {
+          jumpToEnd(true);
+        });
+      }
     }
 
-    trigger.addEventListener("click", openShell);
+    video.addEventListener("timeupdate", function () {
+      if (intro.dataset.state !== IntroState.PLAYING || finished) {
+        return;
+      }
+
+      if (video.duration && video.currentTime >= video.duration - 0.28) {
+        showInvitation();
+      }
+    });
+
+    video.addEventListener("ended", showInvitation);
+
+    trigger.addEventListener("click", playIntro);
 
     if (skipLink) {
       skipLink.addEventListener("click", function (event) {
         event.preventDefault();
-        showInvitation();
-        invitation.focus();
+        jumpToEnd(true);
+        text.setAttribute("tabindex", "-1");
+        window.requestAnimationFrame(function () {
+          text.focus({ preventScroll: true });
+        });
       });
     }
   }

@@ -14,9 +14,8 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Manrope:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="preload" as="image" href="assets/images/shell-closed.webp" />
-    <link rel="preload" as="image" href="assets/images/shell-open.webp" />
-    <link rel="preload" as="image" href="assets/images/pearl.webp" />
+    <link rel="preload" as="image" href="assets/video/shell-open-poster.jpg" />
+    <link rel="preload" as="video" href="assets/video/shell-open.mp4" />
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/global.css" />
@@ -28,65 +27,63 @@
     <link rel="stylesheet" href="css/wishes.css" />
   </head>
   <body data-scene="intro">
-    <a class="skip-link" href="#invitation">Перейти к приглашению</a>
+    <a class="skip-link" href="#invitation-names">Перейти к приглашению</a>
 
     <section
       id="intro"
       class="intro"
-      data-shell
       data-state="CLOSED"
       aria-label="Открыть приглашение"
     >
-      <button
-        type="button"
-        class="intro__trigger"
-        aria-label="Открыть приглашение"
-      >
-        <span class="shell-scene">
-          <img
-            class="shell-closed"
-            src="assets/images/shell-closed.webp"
-            alt=""
-            draggable="false"
-            decoding="async"
-          />
+      <div class="intro__stage">
+        <img
+          class="intro__poster"
+          src="assets/video/shell-open-poster.jpg"
+          alt=""
+          decoding="async"
+          draggable="false"
+        />
+        <video
+          class="intro__video"
+          playsinline
+          muted
+          preload="auto"
+          disablepictureinpicture
+          poster="assets/video/shell-open-poster.jpg"
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
+          <source src="assets/video/shell-open.mp4" type="video/mp4" />
+        </video>
 
-          <span class="shell-open" aria-hidden="true">
-            <span class="shell-open__scene">
-              <span class="shell-open__world">
-                <img
-                  class="shell-bottom"
-                  src="assets/images/shell-open.webp"
-                  alt=""
-                  draggable="false"
-                  decoding="async"
-                />
-                <span class="pearl-wrap">
-                  <span class="pearl-glow pearl-glow--bloom" aria-hidden="true"></span>
-                  <span class="pearl-glow pearl-glow--core" aria-hidden="true"></span>
-                  <img
-                    class="pearl"
-                    src="assets/images/pearl.webp"
-                    alt=""
-                    draggable="false"
-                    decoding="async"
-                  />
-                </span>
-                <span class="shell-lid">
-                  <img
-                    class="shell-lid__image"
-                    src="assets/images/shell-open.webp"
-                    alt=""
-                    draggable="false"
-                    decoding="async"
-                  />
-                </span>
-              </span>
-            </span>
-          </span>
-        </span>
-        <span id="intro-prompt" class="intro__prompt">Откройте приглашение</span>
-      </button>
+        <div class="intro__text" aria-hidden="true" tabindex="-1">
+          <header class="invitation__header">
+            <p class="invitation__greeting">Дорогие гости</p>
+          </header>
+
+          <p class="invitation__message">
+            Мы будем счастливы разделить<br />
+            с вами этот особенный день.
+          </p>
+
+          <h1 id="invitation-names" class="invitation__names">
+            <span class="invitation__name">Эрбол</span>
+            <span class="invitation__ampersand" aria-hidden="true">&amp;</span>
+            <span class="invitation__name">Нази</span>
+          </h1>
+
+          <time class="invitation__date" datetime="2026-09-05">
+            05&nbsp;&bull;&nbsp;09&nbsp;&bull;&nbsp;2026
+          </time>
+        </div>
+
+        <button
+          type="button"
+          class="intro__trigger"
+          aria-label="Открыть приглашение"
+        >
+          <span id="intro-prompt" class="intro__prompt">Откройте приглашение</span>
+        </button>
+      </div>
     </section>
 
     <div class="page">
@@ -97,38 +94,6 @@
         aria-hidden="true"
         aria-labelledby="invitation-names"
       >
-        <section class="pearl-page" aria-label="Приглашение">
-          <span class="pearl-page__glow pearl-page__glow--bloom" aria-hidden="true"></span>
-          <span class="pearl-page__glow pearl-page__glow--core" aria-hidden="true"></span>
-          <img
-            class="pearl-page__image"
-            src="assets/images/pearl.webp"
-            alt=""
-            decoding="async"
-          />
-
-          <div class="pearl-page__content">
-            <header class="invitation__header">
-              <p class="invitation__greeting">Дорогие гости</p>
-            </header>
-
-            <p class="invitation__message">
-              Мы будем счастливы разделить<br />
-              с вами этот особенный день.
-            </p>
-
-            <h1 id="invitation-names" class="invitation__names">
-              <span class="invitation__name">Эрбол</span>
-              <span class="invitation__ampersand" aria-hidden="true">&amp;</span>
-              <span class="invitation__name">Нази</span>
-            </h1>
-
-            <time class="invitation__date" datetime="2026-09-05">
-              05&nbsp;&bull;&nbsp;09&nbsp;&bull;&nbsp;2026
-            </time>
-          </div>
-        </section>
-
         <div class="wedding-details">
           <section
             class="detail reveal"
@@ -333,79 +298,23 @@
           </header>
 
           <div class="wishes__stage">
-            <div class="wish-necklace" aria-hidden="true">
-              <svg
-                class="wish-necklace__thread"
-                viewBox="0 0 400 90"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path
-                  class="wish-necklace__thread-glow"
-                  d="M 8 30 C 70 82, 330 82, 392 30"
-                />
-                <path
-                  class="wish-necklace__thread-line"
-                  d="M 8 30 C 70 82, 330 82, 392 30"
-                />
-              </svg>
-              <div class="wish-necklace__beads">
-                <img
-                  class="wish-bead"
-                  src="assets/images/pearl.webp"
-                  alt=""
-                  draggable="false"
-                  decoding="async"
-                  loading="lazy"
-                  style="--x: 8%; --y: 38%; --s: 0.82"
-                />
-                <img
-                  class="wish-bead"
-                  src="assets/images/pearl.webp"
-                  alt=""
-                  draggable="false"
-                  decoding="async"
-                  loading="lazy"
-                  style="--x: 25%; --y: 72%; --s: 0.94"
-                />
-                <img
-                  class="wish-bead"
-                  src="assets/images/pearl.webp"
-                  alt=""
-                  draggable="false"
-                  decoding="async"
-                  loading="lazy"
-                  style="--x: 42%; --y: 86%; --s: 0.88"
-                />
-                <img
-                  class="wish-bead"
-                  src="assets/images/pearl.webp"
-                  alt=""
-                  draggable="false"
-                  decoding="async"
-                  loading="lazy"
-                  style="--x: 58%; --y: 86%; --s: 1"
-                />
-                <img
-                  class="wish-bead"
-                  src="assets/images/pearl.webp"
-                  alt=""
-                  draggable="false"
-                  decoding="async"
-                  loading="lazy"
-                  style="--x: 75%; --y: 72%; --s: 0.9"
-                />
-                <img
-                  class="wish-bead wish-bead--new"
-                  src="assets/images/pearl.webp"
-                  alt=""
-                  draggable="false"
-                  decoding="async"
-                  loading="lazy"
-                  style="--x: 92%; --y: 38%; --s: 1.08"
-                />
+            <div
+              class="wish-necklace is-empty"
+              id="wish-necklace"
+              aria-label="Пожелания гостей"
+            >
+              <div class="wish-necklace__viewport">
+                <div class="wish-necklace__track is-static"></div>
+              </div>
+              <div class="wish-tooltip" hidden>
+                <p class="wish-tooltip__name"></p>
+                <p class="wish-tooltip__text"></p>
               </div>
             </div>
+
+            <p class="wish-necklace__hint" hidden>
+              Наведите на жемчужину — откроется пожелание
+            </p>
 
             <div class="wish-card">
               <p class="wish-card__title">Ваше пожелание</p>
@@ -479,6 +388,7 @@
     <script src="js/intro.js" defer></script>
     <script src="js/reveal.js" defer></script>
     <script src="js/gallery.js" defer></script>
+    <script src="js/wishes-config.js" defer></script>
     <script src="js/wishes.js" defer></script>
     <script src="js/main.js" defer></script>
   </body>
