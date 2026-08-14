@@ -78,8 +78,8 @@
   position: absolute;
   z-index: 2;
   left: 50%;
-  top: 50%;
-  width: min(72vw, 26rem);
+  top: 65%;
+  width: min(65vw, 23.4rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -197,14 +197,14 @@ body[data-scene="invitation"] {
   }
 
   .intro__text {
-    width: min(52vw, 30rem);
+    width: min(47vw, 27rem);
     gap: clamp(0.9rem, 2.2vh, 1.4rem);
   }
 }
 
 @media (min-width: 960px) {
   .intro__text {
-    width: min(44vw, 32rem);
+    width: min(40vw, 28.8rem);
   }
 }
 

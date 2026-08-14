@@ -110,7 +110,7 @@ body[data-scene="invitation"] .pearl-page__content {
 
 .invitation__greeting {
   font-family: var(--font-display);
-  font-size: clamp(1.46rem, 4.5vw, 2.16rem);
+  font-size: clamp(1.18rem, 3.65vw, 1.75rem);
   font-weight: var(--fw-regular);
   font-style: italic;
   line-height: var(--lh-tight);
@@ -135,7 +135,7 @@ body[data-scene="invitation"] .pearl-page__content {
 .invitation__message {
   max-width: 100%;
   font-family: var(--font-body);
-  font-size: clamp(0.88rem, 2.25vw, 1.06rem);
+  font-size: clamp(0.71rem, 1.83vw, 0.86rem);
   font-weight: var(--fw-regular);
   line-height: 1.65;
   letter-spacing: 0.02em;
@@ -150,7 +150,7 @@ body[data-scene="invitation"] .pearl-page__content {
   column-gap: 0.4em;
   row-gap: 0.1em;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 7.56vw, 3.51rem);
+  font-size: clamp(1.62rem, 6.12vw, 2.84rem);
   font-weight: var(--fw-medium);
   line-height: 1.05;
   letter-spacing: 0.01em;
@@ -181,7 +181,7 @@ body[data-scene="invitation"] .pearl-page__content {
   display: block;
   margin-top: 0.15rem;
   font-family: var(--font-body);
-  font-size: clamp(0.77rem, 1.94vw, 0.92rem);
+  font-size: clamp(0.62rem, 1.58vw, 0.75rem);
   font-weight: var(--fw-medium);
   letter-spacing: 0.24em;
   text-transform: uppercase;
