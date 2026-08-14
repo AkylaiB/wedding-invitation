@@ -19,7 +19,7 @@
   /* Typography */
   --font-display: "Cormorant Garamond", "Palatino Linotype", Palatino, serif;
   --font-body: "Manrope", "Segoe UI", sans-serif;
-  --font-script: "Great Vibes", cursive;
+  --font-script: "Great Vibes", "Marck Script", cursive;
 
   --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;

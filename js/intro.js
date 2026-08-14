@@ -34,13 +34,39 @@
     }
 
     var finished = false;
+    var endWatchTimer = 0;
+    var safetyTimer = 0;
+
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    video.playsInline = true;
+    video.muted = true;
+
+    function clearTimers() {
+      window.clearInterval(endWatchTimer);
+      window.clearTimeout(safetyTimer);
+      endWatchTimer = 0;
+      safetyTimer = 0;
+    }
+
+    function hasFiniteDuration() {
+      return isFinite(video.duration) && video.duration > 0;
+    }
+
+    function isNearEnd() {
+      if (!hasFiniteDuration()) {
+        return Boolean(video.ended);
+      }
+
+      return video.ended || video.currentTime >= video.duration - 0.35;
+    }
 
     function showFirstFrame() {
       if (intro.dataset.state !== IntroState.CLOSED) {
         return;
       }
 
-      if (!isFinite(video.duration) || video.readyState < 1) {
+      if (!hasFiniteDuration() || video.readyState < 1) {
         return;
       }
 
@@ -61,15 +87,24 @@
     }
 
     function freezeLastFrame() {
-      if (!isFinite(video.duration) || video.duration <= 0) {
+      if (!hasFiniteDuration()) {
+        try {
+          video.pause();
+        } catch (error) {
+          /* ignore */
+        }
         return;
       }
 
       try {
         video.pause();
-        video.currentTime = Math.max(0, video.duration - 0.04);
+        /* Avoid seeking on iOS right at the absolute end — it can blank the frame. */
+        var target = Math.max(0, video.duration - 0.12);
+        if (Math.abs(video.currentTime - target) > 0.2) {
+          video.currentTime = target;
+        }
       } catch (error) {
-        /* Seeking can fail before metadata is ready. */
+        /* Seeking can fail on mobile. */
       }
     }
 
@@ -79,12 +114,16 @@
       }
 
       finished = true;
+      clearTimers();
       intro.dataset.state = IntroState.ENDED;
       document.body.dataset.scene = "invitation";
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       text.setAttribute("aria-hidden", "false");
       invitation.setAttribute("aria-hidden", "false");
       trigger.disabled = true;
       trigger.setAttribute("aria-disabled", "true");
+      trigger.setAttribute("tabindex", "-1");
       freezeLastFrame();
     }
 
@@ -97,7 +136,7 @@
         }
       }
 
-      if (!isFinite(video.duration) || video.duration <= 0) {
+      if (!hasFiniteDuration()) {
         video.addEventListener(
           "loadedmetadata",
           function onMeta() {
@@ -106,14 +145,36 @@
           },
           { once: true }
         );
+        window.setTimeout(function () {
+          if (!finished && thenShow) {
+            showInvitation();
+          }
+        }, 1200);
         return;
       }
 
       video.addEventListener("seeked", finishJump);
       try {
-        video.currentTime = Math.max(0, video.duration - 0.04);
+        video.currentTime = Math.max(0, video.duration - 0.12);
       } catch (error) {
         finishJump();
+      }
+
+      window.setTimeout(function () {
+        if (!finished && thenShow) {
+          finishJump();
+        }
+      }, 800);
+    }
+
+    function watchForEnd() {
+      if (finished) {
+        clearTimers();
+        return;
+      }
+
+      if (isNearEnd()) {
+        showInvitation();
       }
     }
 
@@ -124,6 +185,7 @@
 
       trigger.disabled = true;
       trigger.setAttribute("aria-disabled", "true");
+      document.body.style.overflow = "hidden";
 
       if (prefersReducedMotion()) {
         intro.dataset.state = IntroState.PLAYING;
@@ -131,29 +193,70 @@
         return;
       }
 
-      intro.dataset.state = IntroState.PLAYING;
-      var playAttempt = video.play();
+      clearTimers();
 
-      if (playAttempt && typeof playAttempt.catch === "function") {
-        playAttempt.catch(function () {
-          jumpToEnd(true);
-        });
+      function startWatchers() {
+        endWatchTimer = window.setInterval(watchForEnd, 200);
+        safetyTimer = window.setTimeout(function () {
+          if (!finished) {
+            showInvitation();
+          }
+        }, hasFiniteDuration() ? Math.ceil(video.duration * 1000) + 2000 : 10000);
+      }
+
+      function beginPlayback() {
+        if (
+          finished ||
+          intro.dataset.state === IntroState.PLAYING ||
+          intro.dataset.state === IntroState.ENDED
+        ) {
+          return;
+        }
+
+        intro.dataset.state = IntroState.PLAYING;
+        startWatchers();
+
+        var playAttempt = video.play();
+
+        if (playAttempt && typeof playAttempt.then === "function") {
+          playAttempt.catch(function () {
+            jumpToEnd(true);
+          });
+        }
+      }
+
+      /* Wait until the first frame is ready — large files otherwise blank out. */
+      if (video.readyState >= 2) {
+        beginPlayback();
+      } else {
+        video.addEventListener("canplay", beginPlayback, { once: true });
+        video.load();
+        window.setTimeout(function () {
+          if (!finished && intro.dataset.state === IntroState.CLOSED) {
+            beginPlayback();
+          }
+        }, 2500);
       }
     }
 
-    video.addEventListener("timeupdate", function () {
-      if (intro.dataset.state !== IntroState.PLAYING || finished) {
-        return;
-      }
-
-      if (video.duration && video.currentTime >= video.duration - 0.28) {
+    video.addEventListener("timeupdate", watchForEnd);
+    video.addEventListener("ended", showInvitation);
+    video.addEventListener("pause", function () {
+      if (intro.dataset.state === IntroState.PLAYING && isNearEnd()) {
         showInvitation();
       }
     });
 
-    video.addEventListener("ended", showInvitation);
-
     trigger.addEventListener("click", playIntro);
+    trigger.addEventListener("touchend", function (event) {
+      /* Some mobile browsers swallow the synthetic click after touch. */
+      if (intro.dataset.state !== IntroState.CLOSED) {
+        return;
+      }
+
+      event.preventDefault();
+      playIntro();
+    });
 
     if (skipLink) {
       skipLink.addEventListener("click", function (event) {

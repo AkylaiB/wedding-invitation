@@ -79,7 +79,7 @@
   z-index: 2;
   left: 50%;
   top: 50%;
-  width: min(58vw, 22rem);
+  width: min(72vw, 26rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -172,6 +172,23 @@ body[data-scene="invitation"] .page {
 
 body[data-scene="intro"] {
   overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body[data-scene="invitation"] {
+  overflow: auto;
+  overflow-x: hidden;
+  overscroll-behavior: auto;
+}
+
+/* Keep the last video frame visible under the invitation copy on mobile */
+.intro[data-state="ENDED"] .intro__video {
+  z-index: 0;
+}
+
+.intro[data-state="ENDED"] .intro__trigger {
+  pointer-events: none;
+  visibility: hidden;
 }
 
 @media (min-width: 640px) {
@@ -180,14 +197,14 @@ body[data-scene="intro"] {
   }
 
   .intro__text {
-    width: min(42vw, 26rem);
+    width: min(52vw, 30rem);
     gap: clamp(0.9rem, 2.2vh, 1.4rem);
   }
 }
 
 @media (min-width: 960px) {
   .intro__text {
-    width: min(36vw, 28rem);
+    width: min(44vw, 32rem);
   }
 }
 

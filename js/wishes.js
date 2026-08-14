@@ -323,6 +323,7 @@
       img.alt = "";
       img.draggable = false;
       img.decoding = "async";
+      img.loading = "eager";
       button.appendChild(img);
       beads.appendChild(button);
     }
